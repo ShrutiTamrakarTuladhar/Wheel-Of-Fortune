@@ -6,12 +6,17 @@ const body = document.querySelector("body");
 const game = document.createElement("div"); 
 const table = document.createElement("table");
 const row = document.createElement("tr"); 
-const form = document.createElement("form")
+const formDiv = document.createElement("div");
+const form = document.createElement("form");
 const label = document.createElement("label"); 
 label.innerText = "Enter your guess: ";
 const input = document.createElement("input");
-const button = document.createElement("button");
-button.innerText = "Start"; 
+const starbtn = document.createElement("button");
+starbtn.innerText = "Start Game"; 
+const submitDiv = document.createElement("div"); 
+const submitbtn = document.createElement("button"); 
+submitbtn.innerText = "Check"; 
+
 
 game.id = "game"; 
 table.id = "table";
@@ -19,35 +24,42 @@ row.id = "row";
 form.id = "form"; 
 label.id = "label"; 
 input.id = "input"; 
-button.id = "button"; 
+starbtn.id = "startButton"; 
+submitbtn.id = "submitButton"; 
 
 body.appendChild(game); 
 game.appendChild(table); 
-game.appendChild(form); 
+game.appendChild(formDiv); 
+formDiv.appendChild(form); 
 table.appendChild(row);
 form.appendChild(label);
 form.appendChild(input);  
-game.appendChild(button); 
+form.appendChild(submitDiv); 
+submitDiv.appendChild(submitbtn); 
+game.appendChild(starbtn); 
 
-console.log(body)
 // Check if random words can be accessed 
 const randomWord = getRandomWord();
-const length = randomWord.length; 
+const wordLength = randomWord.length; 
 
 // creating columns in the table to represent each letter
 
-for(let i = 0; i < length; i++) {
+for(let i = 0; i < wordLength; i++) {
   const letter = document.createElement("td") 
   letter.id = i;
+  letter.className = "table-secondary";
   letter.innerText = "_";
   letter.style.fontSize = "25px";
+  letter.style.textAlign = "center"
+  letter.className = "border border-success";
+  letter.style.backgroundColor = "lightgreen"; 
   row.appendChild(letter);
 }
 
 /*
 // when start is clicked check if word has 
 // R,S,T,L,N, or E
-
+  
 not case senstive
 if yes - change the display
 */
@@ -56,9 +68,10 @@ const startCheckLetters = ["r","s","t","l","n","e"];
 const wordArr = [...randomWord]; 
 // console.log(wordArr);
 
-button.addEventListener("click", (event) => {
+starbtn.addEventListener("click", (event) => {
   // step 3 
   checkForLetters(startCheckLetters)
+  starbtn.className = "btn btn-success disabled"; 
 });
 
 // function to check answer agians given array and show if same
@@ -68,6 +81,7 @@ function checkForLetters(arrayToCheck) {
 
     if(index != -1) {
       let holder = document.getElementById(i); 
+      holder.style.backgroundColor = "white";
       holder.innerText = letter;
     }
   }); 
@@ -88,10 +102,20 @@ form.addEventListener('submit', (e) => {
   if(checkPassed) {
     // store the input value 
     let value = [...input.value];
+    
+    // check if letters match
     checkForLetters(value); 
-  } 
 
-})
+    // check if all letters have been changed
+    if(isSolved()) {
+      input.setAttribute("readonly", "readonly"); 
+      input.value = ""; 
+      console.log("solved")
+      setTimeout(location.reload.bind(location), 2000)
+    }
+  } 
+  input.value = ""; 
+}); 
 
 function checkIfValid(inputValue){
   if (inputValue == "") {
@@ -123,8 +147,30 @@ function checkIfValid(inputValue){
   }
 }
 
+// check if all letters have been found 
+function isSolved() {
+  for(let i = 0; i < wordLength; i++) {
+    let letter = document.querySelectorAll("td")[i].innerText;
+    if(letter === "_") {
+      return false; 
+    }
+  }
+  return true; 
+}
+
 //CSS 
-game.className = "container";
+game.className = "container position-relative";
+table.className = "table table-bordered"; 
+formDiv.className = "form-group"; 
+form.className = "mb-3";
+label.className = "form-label";
+input.className = "form-control"; 
+starbtn.className = "btn btn-success"; 
+submitDiv.className = "d-grid gap-2 d-md-flex justify-content-md-end";
+submitbtn.className = "btn btn-outline-success"; 
+submitbtn.style.marginTop = "10px"
+game.style.marginTop = "5%"
+
 
 
 
