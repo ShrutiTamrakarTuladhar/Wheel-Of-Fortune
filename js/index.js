@@ -49,7 +49,6 @@ game.appendChild(timerDiv);
 // Check if random words can be accessed 
 const randomWord = getRandomWord();
 const wordLength = randomWord.length; 
-console.log(randomWord);
 const startCheckLetters = ["r","s","t","l","n","e"]; 
 const wordArr = [...randomWord]; 
 
@@ -57,6 +56,7 @@ const wordArr = [...randomWord];
 input.setAttribute("maxLength", "4"); 
 input.setAttribute ("value", ""); 
 input.setAttribute("type", "text");
+input.setAttribute("readonly", "readonly"); 
 
 
 // creating columns in the table to represent each letter
@@ -78,6 +78,7 @@ startbtn.addEventListener("click", (event) => {
   timerId = setInterval(countdown, 1000); 
   checkForLetters(startCheckLetters)
   startbtn.className = "btn btn-success disabled";
+  input.removeAttribute("readonly"); 
 
 }); 
 
@@ -98,7 +99,7 @@ form.addEventListener('submit', (e) => {
     if(isSolved()) {
       input.setAttribute("readonly", "readonly"); 
       input.value = ""; 
-      message.innerText = "YOU GOT IT!"
+      message.innerText = "YOU GOT IT! Play again"
       body.style.backgroundColor = "#CAEEC2"
       setTimeout(location.reload.bind(location), 2000)
     }
@@ -106,6 +107,7 @@ form.addEventListener('submit', (e) => {
   input.value = ""; 
 }); 
 
+console.log(randomWord); 
 // function to check answer agians given array and show if same
 function checkForLetters(arrayToCheck) {
   wordArr.forEach((letter, i) => {
@@ -167,10 +169,10 @@ function isSolved() {
 function countdown() {
   if(timeLeft === -1) {
     clearTimeout(timerId); 
-    message.innerText = "TIME OUT";
+    message.innerText = "TIME OUT! Correct Answer: " + `${randomWord.toUpperCase()}`;
     input.setAttribute("readonly", "readonly"); 
     input.value = ""; 
-    setTimeout(location.reload.bind(location), 2000)
+    setTimeout(location.reload.bind(location), 3000)
   } else {
     timerDiv.innerText = timeLeft + ' seconds';  
     timeLeft--; 
