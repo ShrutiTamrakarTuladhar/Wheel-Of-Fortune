@@ -18,7 +18,7 @@ const submitbtn = document.createElement("button");
 submitbtn.innerText = "Check"; 
 const message = document.createElement("p"); 
 const timerDiv = document.createElement("div"); 
-let timeLeft = 10; 
+let timeLeft = 15; 
 let timerId
 
 
